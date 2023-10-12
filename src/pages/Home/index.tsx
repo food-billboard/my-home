@@ -12,7 +12,11 @@ import {
 import { useSize } from 'ahooks'
 import { Tween } from 'three/examples/jsm/libs/tween.module.js'
 import { OrbitControls } from './utils/OrbitControls'
+import { ROOM_DATA } from './constants'
+import type { RoomDataType } from './constants'
 import styles from './index.less'
+
+const textLoader = new THREE.TextureLoader()
 
 const Home = () => {
 
@@ -26,17 +30,20 @@ const Home = () => {
   const { width=0, height=0 } = useSize(() => containerRef.current!) || {}
 
   // 场景创建
-  function createScene() {
+  function createScene({ name, map, position }: RoomDataType) {
     const geometry = new SphereGeometry(16, 256, 256);
+    geometry.scale(1, 1, -1);
     const material = new MeshBasicMaterial({
-      // map: TextureLoader.load(map),
-      // side: THREE.DoubleSide,
-      color: 0xffffff
+      map: textLoader.load(map),
+      side: THREE.DoubleSide,
     });
-    // geometry.scale(1, 1, -1);
     const room = new Mesh(geometry, material);
-    room.position.set(200, 200, 200)
-    console.log(room, 2222)
+    room.name = name 
+    room.position.set(position.x, position.y, position.z)
+    room.rotation.y = Math.PI / 2
+
+    scene.current?.add(room)
+
     return room 
   }
 
@@ -58,12 +65,23 @@ const Home = () => {
 
       // 初始化相机
       camera.current = new PerspectiveCamera(65, width / height, 0.1, 1000)
-      // camera.position.z = data.cameraZAxis 
+      camera.current.position.z = 2 // data.cameraZAxis 
       scene.current.add(camera.current)
 
       // 镜头控制器
       controls.current = new OrbitControls(camera.current, renderer.current.domElement)
       controls.current.target.set(0, 0, 0)
+      // 转动惯性
+      controls.current.enableDamping = true;
+      // 禁止平移
+      controls.current.enablePan = false;
+      // 缩放限制
+      controls.current.maxDistance = 12;
+      // 垂直旋转限制
+      controls.current.minPolarAngle = Math.PI / 2;
+      controls.current.maxPolarAngle = Math.PI / 2;
+
+
     }
     // 页面尺寸发生变化
     else {
@@ -95,8 +113,7 @@ const Home = () => {
   useEffect(() => {
     const dispose = initThree()
 
-    const room = createScene()
-    scene.current?.add(room)
+    ROOM_DATA.map(createScene)
 
     return dispose
   }, [width, height])
