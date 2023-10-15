@@ -1,50 +1,111 @@
-import { useEffect, useRef } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import * as THREE from 'three'
 import { 
   SphereGeometry, 
   MeshBasicMaterial, 
-  TextureLoader, 
   Mesh,
   WebGLRenderer,
   Scene,
   PerspectiveCamera,
+  Raycaster
 } from 'three'
-import { useSize } from 'ahooks'
-import { Tween } from 'three/examples/jsm/libs/tween.module.js'
+import { useSize, useUpdateEffect } from 'ahooks'
+import { update as tweenUpdate } from 'three/examples/jsm/libs/tween.module.js'
+import RoomChanger from './components/RoomChanger'
+import Marker from './components/Marker'
+import Animations from './utils/animations'
 import { OrbitControls } from './utils/OrbitControls'
-import { ROOM_DATA } from './constants'
-import type { RoomDataType } from './constants'
+import { ROOM_DATA_ARRAY, ROOM_DATA } from './constants'
+import type { RoomDataObject } from './constants'
+import { EVENT, emitter } from './utils/mitt'
 import styles from './index.less'
 
+// 贴图加载
 const textLoader = new THREE.TextureLoader()
+// 相机深度
+const cameraZAxis = 8 
 
 const Home = () => {
+
+  const [ currentRoom, setCurrentRoom ] = useState<string>(ROOM_DATA_ARRAY[0].key)
 
   const containerRef = useRef(null)
 
   const renderer = useRef<THREE.WebGLRenderer>()
   const scene = useRef<THREE.Scene>()
+  const targetScene = useRef<THREE.Scene>()
   const camera = useRef<THREE.PerspectiveCamera>()
+  const rayCaster = useRef<Raycaster>(new Raycaster())
   const controls = useRef<any>()
+
+  const roomRef = useRef<THREE.Mesh>()
 
   const { width=0, height=0 } = useSize(() => containerRef.current!) || {}
 
+  // 场景切换
+  const onRoomChange = useCallback((currentRoom: string) => {
+    setCurrentRoom(currentRoom)
+  }, []) 
+
   // 场景创建
-  function createScene({ name, map, position }: RoomDataType) {
-    const geometry = new SphereGeometry(16, 256, 256);
-    geometry.scale(1, 1, -1);
-    const material = new MeshBasicMaterial({
-      map: textLoader.load(map),
-      side: THREE.DoubleSide,
-    });
-    const room = new Mesh(geometry, material);
-    room.name = name 
-    room.position.set(position.x, position.y, position.z)
-    room.rotation.y = Math.PI / 2
+  function createRoom({ name, map, position }: RoomDataObject) {
+    const isInit = !roomRef.current
+    if(isInit) {
+      const geometry = new SphereGeometry(16, 256, 256);
+      geometry.scale(1, 1, -1);
+      const material = new MeshBasicMaterial({
+        map: textLoader.load(map),
+        side: THREE.DoubleSide,
+      });
+      roomRef.current = new Mesh(geometry, material);
+      roomRef.current.rotation.y = Math.PI / 2
+    }else {
+      (roomRef.current!.material as THREE.MeshBasicMaterial).map = textLoader.load(map)
+    }
 
-    scene.current?.add(room)
+    roomRef.current!.name = name 
+    // roomRef.current!.position.set(position.x, position.y, position.z)
 
-    return room 
+    if(isInit) scene.current?.add(roomRef.current!)
+
+  }
+
+  // 交互点显示检测
+  function interactivePointRayCaster() {
+    emitter.emit(EVENT.MARKER_RAY_CASTER, {
+      callback: function(points: { position: THREE.Vector3, [key: string]: any }[]) {
+        return points.map(point => {
+          const newPoint: any = {
+            ...point,
+            visible: false 
+          }
+          // 获取2D屏幕位置
+          const screenPosition = point.position.clone();
+          const pos = screenPosition.project(camera.current!);
+          rayCaster.current.setFromCamera(screenPosition as any, camera.current!);
+          const intersects = rayCaster.current.intersectObjects(scene.current!.children, true);
+          if (intersects.length === 0) {
+            // 未找到相交点，显示
+            newPoint.visible = true 
+          } else {
+            // 找到相交点
+            // 获取相交点的距离和点的距离
+            const intersectionDistance = intersects[0].distance;
+            const pointDistance = point.position.distanceTo(camera.current!.position);
+            // 相交点距离比点距离近，隐藏；相交点距离比点距离远，显示
+            newPoint.visible = intersectionDistance >= pointDistance
+          }
+          newPoint.visible = pos.z <= 1
+          // console.log(newPoint.visible, 2222)
+          const translateX = screenPosition.x * width * 0.5;
+          const translateY = -screenPosition.y * height * 0.5;
+          newPoint.extraStyle = {
+            transform: `translateX(${translateX}px) translateY(${translateY}px)`
+          }
+          return newPoint
+        })
+      }
+    })
   }
 
   // 初始化
@@ -62,10 +123,11 @@ const Home = () => {
 
       // 初始化场景
       scene.current = new Scene()
+      targetScene.current = new Scene()
 
       // 初始化相机
       camera.current = new PerspectiveCamera(65, width / height, 0.1, 1000)
-      camera.current.position.z = 2 // data.cameraZAxis 
+      camera.current.position.set(0, 0, 2)
       scene.current.add(camera.current)
 
       // 镜头控制器
@@ -97,8 +159,9 @@ const Home = () => {
 
     // 动画
     const tick = () => {
+      interactivePointRayCaster()
       controls.current?.update();
-      // Tween && new Tween().update();
+      tweenUpdate()
       renderer.current?.render(scene.current!, camera.current!);
       if(!done) window.requestAnimationFrame(tick);
     };
@@ -112,15 +175,31 @@ const Home = () => {
 
   useEffect(() => {
     const dispose = initThree()
-
-    ROOM_DATA.map(createScene)
-
+    createRoom(ROOM_DATA_ARRAY[0])
     return dispose
   }, [width, height])
+
+  useUpdateEffect(() => {
+    const currentRoomData = ROOM_DATA[currentRoom]
+    createRoom(currentRoomData)
+    // const x = currentRoomData.position.x
+    // const y = currentRoomData.position.y
+    // const z = currentRoomData.position.z 
+
+    // Animations.animateCamera(camera.current!, controls.current, { x, y, z: cameraZAxis }, { x, y, z }, 1600);
+
+  }, [currentRoom])
 
   return (
     <div className={styles['home-page']} ref={containerRef}>
       <canvas id="my-house" />
+      <RoomChanger 
+        currentRoom={currentRoom}
+        onRoomChange={onRoomChange}
+      />
+      <Marker
+        currentRoom={currentRoom}
+      />
     </div>
   )
 
