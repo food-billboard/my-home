@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
+import { FadeLoader } from 'react-spinners'
 import * as THREE from 'three'
 import { 
   SphereGeometry, 
@@ -13,6 +14,7 @@ import { useSize, useUpdateEffect } from 'ahooks'
 import { update as tweenUpdate } from 'three/examples/jsm/libs/tween.module.js'
 import RoomChanger from './components/RoomChanger'
 import Marker from './components/Marker'
+import { sleep } from './utils'
 import Animations from './utils/animations'
 import { OrbitControls } from './utils/OrbitControls'
 import { ROOM_DATA_ARRAY, ROOM_DATA } from './constants'
@@ -28,6 +30,7 @@ const cameraZAxis = 8
 const Home = () => {
 
   const [ currentRoom, setCurrentRoom ] = useState<string>(ROOM_DATA_ARRAY[0].key)
+  const [ changeRoomLoading, setChangeRoomLoading ] = useState(false)
 
   const containerRef = useRef(null)
 
@@ -48,20 +51,33 @@ const Home = () => {
   }, []) 
 
   // 场景创建
-  function createRoom({ name, map, position }: RoomDataObject) {
+  async function createRoom({ name, map, position }: RoomDataObject) {
+    const timestamps = Date.now()
+    setChangeRoomLoading(true)
+    async function loadMap() {
+      let mapResult!: THREE.Texture;
+      await new Promise<void>((resolve) => {
+        mapResult = textLoader.load(map, () => resolve())
+      });
+      return mapResult
+    }
     const isInit = !roomRef.current
+    const mapResult = await loadMap()
     if(isInit) {
       const geometry = new SphereGeometry(16, 256, 256);
       geometry.scale(1, 1, -1);
       const material = new MeshBasicMaterial({
-        map: textLoader.load(map),
         side: THREE.DoubleSide,
       });
       roomRef.current = new Mesh(geometry, material);
       roomRef.current.rotation.y = Math.PI / 2
-    }else {
-      (roomRef.current!.material as THREE.MeshBasicMaterial).map = textLoader.load(map)
     }
+
+    if(!isInit) await sleep(Math.max(2000 - Date.now() + timestamps, 0));
+
+    setChangeRoomLoading(false);
+
+    (roomRef.current!.material as THREE.MeshBasicMaterial).map = mapResult
 
     roomRef.current!.name = name 
     // roomRef.current!.position.set(position.x, position.y, position.z)
@@ -95,8 +111,7 @@ const Home = () => {
             // 相交点距离比点距离近，隐藏；相交点距离比点距离远，显示
             newPoint.visible = intersectionDistance >= pointDistance
           }
-          newPoint.visible = pos.z <= 1
-          // console.log(newPoint.visible, 2222)
+          newPoint.visible = pos.z < 0.99
           const translateX = screenPosition.x * width * 0.5;
           const translateY = -screenPosition.y * height * 0.5;
           newPoint.extraStyle = {
@@ -126,7 +141,7 @@ const Home = () => {
       targetScene.current = new Scene()
 
       // 初始化相机
-      camera.current = new PerspectiveCamera(65, width / height, 0.1, 1000)
+      camera.current = new PerspectiveCamera(55, width / height, 0.1, 1000)
       camera.current.position.set(0, 0, 2)
       scene.current.add(camera.current)
 
@@ -174,6 +189,7 @@ const Home = () => {
   }
 
   useEffect(() => {
+    if(!width && !height) return 
     const dispose = initThree()
     createRoom(ROOM_DATA_ARRAY[0])
     return dispose
@@ -192,14 +208,32 @@ const Home = () => {
 
   return (
     <div className={styles['home-page']} ref={containerRef}>
-      <canvas id="my-house" />
-      <RoomChanger 
-        currentRoom={currentRoom}
-        onRoomChange={onRoomChange}
+      <canvas 
+        id="my-house" 
+        style={changeRoomLoading ? {
+          filter: 'blur(10px)'
+        } : {}}
       />
-      <Marker
-        currentRoom={currentRoom}
-      />
+      {
+        !changeRoomLoading && (
+          <>
+            <RoomChanger 
+              currentRoom={currentRoom}
+              onRoomChange={onRoomChange}
+            />
+            <Marker
+              currentRoom={currentRoom}
+            />
+          </>
+        )
+      }
+      {
+        changeRoomLoading && (
+          <div className={styles['home-page-loading']}>
+            <FadeLoader color='rgb(54, 215, 183)' />
+          </div>
+        )
+      }
     </div>
   )
 

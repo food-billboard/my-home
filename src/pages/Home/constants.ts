@@ -2,60 +2,63 @@ import { Vector3 } from 'three'
 
 // 房间数据 对象
 export const ROOM_DATA: RoomData = {
-  test1: {
-    name: '测试',
+  bridgeStart: {
+    name: '桥下',
+    description: '一开始的门口',
     floor: 0,
     map: new URL('@/assets/map_living_room.jpg', import.meta.url).href,
     position: new Vector3(0, 0, 0),
     index: true,
     visibleRoom: [
-      {
-        key: 'test2',
-        position: new Vector3(-6, 2, -8)
-      },
-      {
-        key: 'test4',
-        position: new Vector3(-12, 2, 15)
-      }
+      // {
+      //   key: 'test2',
+      //   position: new Vector3(-6, 2, -8)
+      // },
     ],
     interactivePoints: [
-      {
-        key: '2',
-        name: '测试111',
-        description: '这是一个测试物品',
-        position: new Vector3(-6, 2, -8),
-        cover: new URL('@/assets/thing.jpg', import.meta.url).href,
-      }
+      // {
+      //   key: '2',
+      //   name: '测试111',
+      //   description: '这是一个测试物品',
+      //   position: new Vector3(-6, 2, -8),
+      //   cover: new URL('@/assets/thing.jpg', import.meta.url).href,
+      // }
     ]
   },
-  test4: {
-    name: '测试22222',
+  glfHomeStart: {
+    name: '我的家',
+    description: '家门口',
     floor: 0,
-    map: new URL('@/assets/floor_1.jpeg', import.meta.url).href,
+    map: new URL('@/assets/map_living_room.jpg', import.meta.url).href,
     position: new Vector3(0, 0, 0),
-    index: true,
-    visibleRoom: [
-      {
-        key: 'test·',
-        position: new Vector3(0, 0, 0)
-      }
-    ],
+    visibleRoom: [],
     interactivePoints: []
   },
-  test2: {
-    name: '测试2222',
+  glfHomeLobby: {
+    name: '门前空地',
+    description: '一楼大门进来',
     floor: 0,
+    map: new URL('@/assets/map_living_room.jpg', import.meta.url).href,
+    position: new Vector3(0, 0, 0),
+    visibleRoom: [],
+    interactivePoints: []
+  },
+  glfHomeFloor2Start: {
+    name: '楼梯',
+    description: '二楼楼梯口',
+    floor: 1,
+    map: new URL('@/assets/map_living_room.jpg', import.meta.url).href,
+    position: new Vector3(0, 0, 0),
+    visibleRoom: [],
+    interactivePoints: []
+  },
+  glfHomeFloor2Living: {
+    name: '客厅',
+    description: '二楼的客厅',
+    floor: 1,
     map: new URL('@/assets/map_bed_room.jpg', import.meta.url).href,
     position: new Vector3(0, 0, 0),
-    interactivePoints: [
-      {
-        key: '4',
-        name: '测试111',
-        description: '这是一个测试物品',
-        position: new Vector3(0, 0, 0),
-        cover: new URL('@/assets/thing.jpg', import.meta.url).href,
-      }
-    ]
+    interactivePoints: []
   },
   test3: {
     name: '测试3333',
@@ -101,6 +104,7 @@ export type VisibleRoom = {
 export type RoomDataObject = {
   floor: number 
   name: string
+  description?: string 
   map: string
   position: Vector3
   index?: boolean
