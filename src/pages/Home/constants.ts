@@ -319,6 +319,22 @@ export const ROOM_DATA: RoomData = {
         key: 'glfHomeFloor3Staircase',
         position: new Vector3(-6, 2, -8)
       },
+    ],
+    interactivePoints: [
+      {
+        key: 'parentWeedingPhoto',
+        name: '结婚照',
+        description: '爸爸妈妈的结婚照，1996年12月18号',
+        position: new Vector3(-6, 2, -8),
+        cover: new URL('@/assets/thing.jpg', import.meta.url).href,
+      },
+      {
+        key: 'originWC',
+        name: '一堵墙',
+        description: '这里以前是一个厕所门口，后面被填上了',
+        position: new Vector3(-6, 2, -8),
+        cover: new URL('@/assets/thing.jpg', import.meta.url).href,
+      },
     ]
   },
   glfHomeFloor3Wc: {
@@ -361,6 +377,29 @@ export const ROOM_DATA: RoomData = {
         key: 'glfHomeFloor3Staircase',
         position: new Vector3(-6, 2, -8)
       },
+    ],
+    interactivePoints: [
+      {
+        key: 'myWeedingPhoto',
+        name: '我的结婚照',
+        description: '比较满意的几张',
+        position: new Vector3(-6, 2, -8),
+        cover: new URL('@/assets/thing.jpg', import.meta.url).href,
+      },
+      {
+        key: 'originCenterHouse',
+        name: '客厅',
+        description: '以前这里是一个客厅',
+        position: new Vector3(-6, 2, -8),
+        cover: new URL('@/assets/thing.jpg', import.meta.url).href,
+      },
+      {
+        key: 'originLeftHouse',
+        name: '以前的卧室',
+        description: '以前这里是爸爸妈妈的卧室',
+        position: new Vector3(-6, 2, -8),
+        cover: new URL('@/assets/thing.jpg', import.meta.url).href,
+      },
     ]
   },
   glfHomeFloor3Gym: {
@@ -373,6 +412,15 @@ export const ROOM_DATA: RoomData = {
       {
         key: 'glfHomeFloor3Bedroom',
         position: new Vector3(-6, 2, -8)
+      },
+    ],
+    interactivePoints: [
+      {
+        key: 'originMyBedRoom',
+        name: '小时候的卧室',
+        description: '去年这里还是我的卧室呢',
+        position: new Vector3(-6, 2, -8),
+        cover: new URL('@/assets/thing.jpg', import.meta.url).href,
       },
     ]
   },
