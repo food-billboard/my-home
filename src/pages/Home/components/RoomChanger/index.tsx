@@ -1,12 +1,10 @@
-import { CSSProperties, useCallback, useEffect, useMemo, useState } from 'react'
+import { CSSProperties, useCallback, useEffect, useState } from 'react'
 import { throttle } from 'lodash'
 import {
   ROOM_DATA,
   ROOM_DATA_ARRAY,
-  MAX_ROOM_FLOOR,
-  MIN_ROOM_FLOOR
 } from '../../constants'
-import type { RoomDataObject, VisibleRoom } from '../../constants'
+import type {  VisibleRoom } from '../../constants'
 import { emitter, EVENT } from '../../utils/mitt'
 import styles from './index.less'
 import markerStyle from '../Marker/index.less'
@@ -22,7 +20,7 @@ const RoomChanger = (props: RoomChangerProps) => {
 
   const { currentRoom, onRoomChange } = props
 
-  const { floor } = ROOM_DATA[currentRoom]
+  const { floorDown, floorUp, floor } = ROOM_DATA[currentRoom]
 
   const [roomList, setRoomList] = useState<CustomRoomData[]>([])
 
@@ -56,7 +54,7 @@ const RoomChanger = (props: RoomChangerProps) => {
     <>
       <div className={styles['room-changer']}>
         {
-          floor > MIN_ROOM_FLOOR && (
+          !!floorDown && (
             <div
               key={'down'}
               className={styles['room-changer-item']}
@@ -84,7 +82,7 @@ const RoomChanger = (props: RoomChangerProps) => {
             })
         }
         {
-          floor < MAX_ROOM_FLOOR && (
+          !!floorUp && (
             <div
               key={'up'}
               className={styles['room-changer-item']}
