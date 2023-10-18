@@ -1,15 +1,8 @@
-import { useCallback, useMemo, useEffect, useState, CSSProperties } from 'react'
-import {
-  SphereGeometry,
-  MeshBasicMaterial,
-  Mesh,
-  WebGLRenderer,
-  Scene,
-  PerspectiveCamera,
-  Raycaster
-} from 'three'
-import { useGetState } from 'ahooks'
+import { useCallback, useEffect, useState, CSSProperties, useRef } from 'react'
+import Marquee from 'react-fast-marquee'
 import { BounceLoader } from 'react-spinners'
+import * as THREE from 'three'
+import Modal from '../Modal'
 import { EVENT, emitter } from '../../utils/mitt'
 import { ROOM_DATA } from '../../constants'
 import type { InteractivePoint } from '../../constants'
@@ -27,20 +20,37 @@ const Marker = (props: MarkerProps) => {
   const { currentRoom } = props
 
   const [interactivePoints, setInteractivePoints] = useState<CustomInteractivePoint[]>([])
-  const [previewCover, setPreviewCover] = useState('')
+  const [previewData, setPreviewData] = useState({
+    image: '',
+    visible: false 
+  })
 
-  const handleClick = useCallback(() => {
-    alert('1111')
+  const handleClick = useCallback((target: CustomInteractivePoint) => {
+    // alert('1111')
+  }, [])
+
+  const changeDataRef = useRef<{ [key: string]: { x: number, y: number, z: number } }>({})
+  const handleChange = useCallback((pointKey: string, key: string, value: number, e: any) => {
+    e.stopPropagation()
+    changeDataRef.current[pointKey] = changeDataRef.current[pointKey] || { x: 0, y: 0, z: 0 };
+    (changeDataRef.current[pointKey] as any)[key] += value 
   }, [])
 
   const handlePreview = useCallback((cover: string, e: any) => {
-    console.log(22222)
     e.stopPropagation()
-    setPreviewCover(cover)
+    setPreviewData({
+      image: cover,
+      visible: true 
+    })
   }, [])
 
   const onClose = useCallback(() => {
-    setPreviewCover('')
+    setPreviewData(prev => {
+      return {
+        ...prev,
+        visible: false 
+      }
+    })
   }, [])
 
   useEffect(() => {
@@ -52,7 +62,17 @@ const Marker = (props: MarkerProps) => {
       }
       const currentRoomData = ROOM_DATA[currentRoom]
       const { interactivePoints = [] } = currentRoomData
-      const newInteractivePoints = callback(interactivePoints)
+      // const newInteractivePoints = callback(interactivePoints)
+      const newInteractivePoints = callback(interactivePoints.map(item => {
+        return {
+          ...item,
+          position: new THREE.Vector3(
+            item.position.x + (changeDataRef.current?.[item.key]?.x || 0), 
+            item.position.y + (changeDataRef.current?.[item.key]?.y || 0), 
+            item.position.z + (changeDataRef.current?.[item.key]?.z || 0)
+          )
+        }
+      }))
       setInteractivePoints(newInteractivePoints)
     }
     const listener = throttle(_listener, 200)
@@ -82,28 +102,29 @@ const Marker = (props: MarkerProps) => {
               <div className={styles['room-marker-item-main']}>
                 <img src={cover} onClick={handlePreview.bind(null, cover)} />
                 <div className={styles['room-marker-item-main-content']}>
+                  <div style={{display: 'flex', justifyContent: 'space-between', padding: '8px 0'}}>
+                    <div onClick={handleChange.bind(null, key, 'x', .5)}>添加X</div>
+                    <div onClick={handleChange.bind(null, key, 'x', -.5)} style={{marginRight: 8}}>减少X</div>
+                    <div onClick={handleChange.bind(null, key, 'y', .5)}>添加Y</div>
+                    <div onClick={handleChange.bind(null, key, 'y', -.5)} style={{marginRight: 8}}>减少Y</div>
+                    <div onClick={handleChange.bind(null, key, 'z', .5)}>添加Z</div>
+                    <div onClick={handleChange.bind(null, key, 'z', -.5)}>减少Z</div>
+                  </div>
                   <div>{name}</div>
-                  <div>{description}</div>
+                  <div>({item.position.x})({item.position.y})({item.position.z})</div>
+                  <Marquee speed={25} pauseOnHover>{description}</Marquee>
                 </div>
               </div>
             </div>
           )
         })
       }
-      <div 
-        className={styles['preview-modal']} 
-        style={{
-          visibility: previewCover ? 'visible' : 'hidden'
-        }}
+      <Modal
+        visible={!!previewData.visible}
+        onClose={onClose}
       >
-      <div onClick={onClose} className={styles['preview-modal-mask']} />
-        <div
-          className={styles['preview-modal-main']}
-        >
-          <div className={styles['preview-modal-close']} onClick={onClose}>X</div>
-          <img width={'100%'} src={previewCover} />
-        </div>
-      </div>
+        <img src={previewData.image} />
+      </Modal>
     </div>
   )
 

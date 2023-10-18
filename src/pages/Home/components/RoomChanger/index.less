@@ -9,11 +9,9 @@
   justify-content: center;
   align-items: flex-end;
   &-item {
-    padding: 4px 8px;
-    border-top-left-radius: 4px;
-    border-bottom-left-radius: 4px;
-    background-color: rgba(0, 0, 0, 0.2);
-    cursor: pointer;
+    padding: 4px 16px;
+    border-top-left-radius: 12px;
+    border-bottom-left-radius: 12px;
     transition: background-color .5s;
     margin-bottom: 12px;
     &:nth-last-child(1) {
@@ -24,7 +22,34 @@
     }
   }
 }
-
+.room-changer-item-common {
+  user-select: none;
+  padding: 4px 16px;
+  color: white;
+  background-color: rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  @keyframes move {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(50%);
+    }
+  }
+  &::after {
+    content: "";
+    color: white;
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIAAAACACAMAAAD04JH5AAAApVBMVEUAAAD///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////+4/eNVAAAANnRSTlMAf3Dv0LitX9+/o56UkDsiFwr18ce7p5mMiIR2Z1Eq+erj29TLsmtaVUxJRD84My8mHhIPBTDy68iVAAAByElEQVR42u3a2VLbQBCF4SN5wzbesIlxYhsStoSwL+f9Hw2qKBhgbGu46D4FNd8T/FctqdXIsizLsiz7Shaz5skDdNp8Uiuhcshne9Ao+KILiQZfNe8gMGawewN/fKt+BXd8Z+sc3vhebQFn/KgFX4yUcMVYAU9coQdHXKUDP1zp+BZeuFp7ACdc4/ASPrjO7/9wwbV2/sIDN5jDATf5BXvcaAZz3GwKa6zw4x62WKUxhClWmlzDEqv9uYAhJjg4gx2m2D+FGaY5gRUmKmCEqfZgg8m6MMF0zREM8BPaQ0AawPpSHMCtvjiAtX+igKClDmCpDmChDmBPHcCuOoDb6gC21AFTdUBDHdBRB/wUB4yX4oAC2oDJQBvQuIU0oANIA3rQBhTQBpTQBpxCGlA7gyggbCqUAUfXMMBAs61ioNnXOb8Fxpyf/zHR+Amc34Fjzl/EMcFO4JMBR0uYYoXdIWxVjZ8RjInGTyAaP4H6pxkE4ycxYLyACwaaexoGmosiBpqbKsfFfHrAFI4Ym8GTYPxUBMzhK77bcOZ5uVIdUL+Eu53oeslZXX3Uuq0+6x0ciA+b0Z/wyX4JmdG8c9zrI8uyLMuy7Lt5BAWrgInqrZviAAAAAElFTkSuQmCC');
+    background-repeat: no-repeat;
+    width: 16px;
+    height: 16px;
+    background-size: 100% 100%;
+    animation: move 1s infinite ease-in alternate;
+  }
+}
 .room-changer-item-visible {
-    
+  user-select: none;
+  border-radius: 12px;
 }

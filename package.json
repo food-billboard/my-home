@@ -12,6 +12,7 @@
     "ahooks": "^3.7.8",
     "lodash": "^4.17.21",
     "mitt": "^3.0.1",
+    "react-fast-marquee": "^1.6.2",
     "react-spinners": "^0.13.8",
     "three": "^0.157.0",
     "umi": "^4.0.83"

@@ -85,7 +85,7 @@ const RoomChanger = (props: RoomChangerProps) => {
           !!floorUp && (
             <div
               key={'up'}
-              className={styles['room-changer-item']}
+              className={`${styles['room-changer-item']} ${styles['room-changer-item-common']}`}
               onClick={handleFloorChange.bind(null, floor + 1)}
             >
               上楼
@@ -103,11 +103,11 @@ const RoomChanger = (props: RoomChangerProps) => {
               return (
                 <div
                   key={key}
-                  className={styles['room-changer-visible']}
+                  className={`${styles['room-changer-item-visible']} ${styles['room-changer-item-common']}`}
                   onClick={onRoomChange.bind(null, key)}
                   style={extraStyle}
                 >
-                  {name}
+                  {name}2222
                 </div>
               )
             })

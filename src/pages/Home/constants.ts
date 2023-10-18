@@ -8,11 +8,15 @@ export const ROOM_DATA: RoomData = {
     floor: 0,
     map: new URL('@/assets/map_living_room.jpg', import.meta.url).href,
     position: new Vector3(0, 0, 0),
+    thumbPosition: {
+      left: 20,
+      top: 20
+    },
     index: true,
     visibleRoom: [
       {
         key: 'glfHomeStart',
-        position: new Vector3(-6, 2, -8)
+        position: new Vector3(-2.5, 3.5, -8)
       },
     ],
     interactivePoints: [
@@ -38,6 +42,10 @@ export const ROOM_DATA: RoomData = {
     floor: 0,
     map: new URL('@/assets/map_living_room.jpg', import.meta.url).href,
     position: new Vector3(0, 0, 0),
+    thumbPosition: {
+      left: 20,
+      top: 20
+    },
     visibleRoom: [
       {
         key: 'bridgeStart',
@@ -79,6 +87,10 @@ export const ROOM_DATA: RoomData = {
     floor: 0,
     map: new URL('@/assets/map_living_room.jpg', import.meta.url).href,
     position: new Vector3(0, 0, 0),
+    thumbPosition: {
+      left: 20,
+      top: 20
+    },
     floorUp: true,
     visibleRoom: [
       {
@@ -113,6 +125,10 @@ export const ROOM_DATA: RoomData = {
     floor: 0,
     map: new URL('@/assets/map_living_room.jpg', import.meta.url).href,
     position: new Vector3(0, 0, 0),
+    thumbPosition: {
+      left: 20,
+      top: 20
+    },
     visibleRoom: [
       {
         key: 'glfHomeStart',
@@ -130,6 +146,10 @@ export const ROOM_DATA: RoomData = {
     floor: 0,
     map: new URL('@/assets/map_living_room.jpg', import.meta.url).href,
     position: new Vector3(0, 0, 0),
+    thumbPosition: {
+      left: 20,
+      top: 20
+    },
     visibleRoom: [
       {
         key: 'glfHomeStart',
@@ -147,6 +167,10 @@ export const ROOM_DATA: RoomData = {
     floor: 0,
     map: new URL('@/assets/map_living_room.jpg', import.meta.url).href,
     position: new Vector3(0, 0, 0),
+    thumbPosition: {
+      left: 20,
+      top: 20
+    },
     visibleRoom: [
       {
         key: 'glfHomeLane',
@@ -181,6 +205,10 @@ export const ROOM_DATA: RoomData = {
     floorDown: true,
     map: new URL('@/assets/map_living_room.jpg', import.meta.url).href,
     position: new Vector3(0, 0, 0),
+    thumbPosition: {
+      left: 20,
+      top: 20
+    },
     visibleRoom: [
       {
         key: 'glfHomeFloor2Living',
@@ -202,6 +230,10 @@ export const ROOM_DATA: RoomData = {
     floor: 1,
     map: new URL('@/assets/map_bed_room.jpg', import.meta.url).href,
     position: new Vector3(0, 0, 0),
+    thumbPosition: {
+      left: 20,
+      top: 20
+    },
     floorUp: true,
     visibleRoom: [
       {
@@ -236,6 +268,13 @@ export const ROOM_DATA: RoomData = {
         position: new Vector3(-6, 2, -8),
         cover: new URL('@/assets/thing.jpg', import.meta.url).href,
       },
+      {
+        key: 'fatherWine',
+        name: '酒',
+        description: '爸爸的宝贝杨梅烧酒',
+        position: new Vector3(-6, 2, -8),
+        cover: new URL('@/assets/thing.jpg', import.meta.url).href,
+      },
     ]
   },
   glfHomeFloor2Kitchen: {
@@ -244,6 +283,10 @@ export const ROOM_DATA: RoomData = {
     floor: 1,
     map: new URL('@/assets/map_study_room.jpg', import.meta.url).href,
     position: new Vector3(0, 0, 0),
+    thumbPosition: {
+      left: 20,
+      top: 20
+    },
     visibleRoom: [
       {
         key: 'glfHomeFloor2Living',
@@ -257,6 +300,10 @@ export const ROOM_DATA: RoomData = {
     floor: 1,
     map: new URL('@/assets/map_study_room.jpg', import.meta.url).href,
     position: new Vector3(0, 0, 0),
+    thumbPosition: {
+      left: 20,
+      top: 20
+    },
     visibleRoom: [
       {
         key: 'glfHomeFloor2Living',
@@ -272,6 +319,10 @@ export const ROOM_DATA: RoomData = {
     floorUp: true,
     map: new URL('@/assets/map_study_room.jpg', import.meta.url).href,
     position: new Vector3(0, 0, 0),
+    thumbPosition: {
+      left: 20,
+      top: 20
+    },
     visibleRoom: [
       {
         key: 'glfHomeFloor3BackDoor',
@@ -301,6 +352,10 @@ export const ROOM_DATA: RoomData = {
     floor: 2,
     map: new URL('@/assets/map_study_room.jpg', import.meta.url).href,
     position: new Vector3(0, 0, 0),
+    thumbPosition: {
+      left: 20,
+      top: 20
+    },
     visibleRoom: [
       {
         key: 'glfHomeFloor3Staircase',
@@ -314,6 +369,10 @@ export const ROOM_DATA: RoomData = {
     floor: 2,
     map: new URL('@/assets/map_study_room.jpg', import.meta.url).href,
     position: new Vector3(0, 0, 0),
+    thumbPosition: {
+      left: 20,
+      top: 20
+    },
     visibleRoom: [
       {
         key: 'glfHomeFloor3Staircase',
@@ -343,6 +402,10 @@ export const ROOM_DATA: RoomData = {
     floor: 2,
     map: new URL('@/assets/map_study_room.jpg', import.meta.url).href,
     position: new Vector3(0, 0, 0),
+    thumbPosition: {
+      left: 20,
+      top: 20
+    },
     visibleRoom: [
       {
         key: 'glfHomeFloor3Staircase',
@@ -356,6 +419,10 @@ export const ROOM_DATA: RoomData = {
     floor: 2,
     map: new URL('@/assets/map_study_room.jpg', import.meta.url).href,
     position: new Vector3(0, 0, 0),
+    thumbPosition: {
+      left: 20,
+      top: 20
+    },
     visibleRoom: [
       {
         key: 'glfHomeFloor3Gym',
@@ -408,6 +475,10 @@ export const ROOM_DATA: RoomData = {
     floor: 2,
     map: new URL('@/assets/map_study_room.jpg', import.meta.url).href,
     position: new Vector3(0, 0, 0),
+    thumbPosition: {
+      left: 20,
+      top: 20
+    },
     visibleRoom: [
       {
         key: 'glfHomeFloor3Bedroom',
@@ -430,6 +501,10 @@ export const ROOM_DATA: RoomData = {
     floor: 2,
     map: new URL('@/assets/map_study_room.jpg', import.meta.url).href,
     position: new Vector3(0, 0, 0),
+    thumbPosition: {
+      left: 20,
+      top: 20
+    },
     visibleRoom: [
       {
         key: 'glfHomeFloor3Bedroom',
@@ -443,6 +518,10 @@ export const ROOM_DATA: RoomData = {
     floor: 2,
     map: new URL('@/assets/map_study_room.jpg', import.meta.url).href,
     position: new Vector3(0, 0, 0),
+    thumbPosition: {
+      left: 20,
+      top: 20
+    },
     visibleRoom: [
       {
         key: 'glfHomeFloor3Bedroom',
@@ -456,6 +535,10 @@ export const ROOM_DATA: RoomData = {
     floor: 2,
     map: new URL('@/assets/map_study_room.jpg', import.meta.url).href,
     position: new Vector3(0, 0, 0),
+    thumbPosition: {
+      left: 20,
+      top: 20
+    },
     visibleRoom: [
       {
         key: 'glfHomeFloor3Bedroom',
@@ -470,6 +553,10 @@ export const ROOM_DATA: RoomData = {
     floorDown: true,
     map: new URL('@/assets/map_study_room.jpg', import.meta.url).href,
     position: new Vector3(0, 0, 0),
+    thumbPosition: {
+      left: 20,
+      top: 20
+    },
   }
 }
 
@@ -502,6 +589,10 @@ export type RoomDataObject = {
   description?: string 
   map: string
   position: Vector3
+  thumbPosition: {
+    left: number 
+    top: number 
+  }
   index?: boolean
   interactivePoints?: InteractivePoint[]
   visibleRoom?: VisibleRoom[]

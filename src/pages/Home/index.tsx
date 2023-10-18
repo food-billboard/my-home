@@ -14,8 +14,9 @@ import { useSize, useUpdateEffect } from 'ahooks'
 import { update as tweenUpdate } from 'three/examples/jsm/libs/tween.module.js'
 import RoomChanger from './components/RoomChanger'
 import Marker from './components/Marker'
+import TinyMap from './components/TinyMap'
+import WaterMark from './components/WaterMark'
 import { sleep } from './utils'
-import Animations from './utils/animations'
 import { OrbitControls } from './utils/OrbitControls'
 import { ROOM_DATA_ARRAY, ROOM_DATA } from './constants'
 import type { RoomDataObject } from './constants'
@@ -73,7 +74,7 @@ const Home = () => {
       roomRef.current.rotation.y = Math.PI / 2
     }
 
-    if(!isInit) await sleep(Math.max(2000 - Date.now() + timestamps, 0));
+    // if(!isInit) await sleep(Math.max(2000 - Date.now() + timestamps, 0));
 
     setChangeRoomLoading(false);
 
@@ -111,7 +112,7 @@ const Home = () => {
             // 相交点距离比点距离近，隐藏；相交点距离比点距离远，显示
             newPoint.visible = intersectionDistance >= pointDistance
           }
-          newPoint.visible = pos.z < 0.99
+          newPoint.visible = pos.z < 1
           const translateX = screenPosition.x * width * 0.5;
           const translateY = -screenPosition.y * height * 0.5;
           newPoint.extraStyle = {
@@ -120,6 +121,14 @@ const Home = () => {
           return newPoint
         })
       }
+    })
+  }
+
+  // 普通three实例共享
+  function normalThreeInstanceTick() {
+    emitter.emit(EVENT.THREE_INSTANCE_TICK, {
+      camera: camera.current,
+      controls: controls.current
     })
   }
 
@@ -175,6 +184,7 @@ const Home = () => {
     // 动画
     const tick = () => {
       interactivePointRayCaster()
+      normalThreeInstanceTick()
       controls.current?.update();
       tweenUpdate()
       renderer.current?.render(scene.current!, camera.current!);
@@ -234,6 +244,10 @@ const Home = () => {
           </div>
         )
       }
+      <TinyMap 
+        currentRoom={currentRoom}
+      />
+      <WaterMark />
     </div>
   )
 
