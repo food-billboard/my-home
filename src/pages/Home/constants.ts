@@ -454,6 +454,13 @@ export const ROOM_DATA: RoomData = {
         cover: new URL('@/assets/thing.jpg', import.meta.url).href,
       },
       {
+        key: 'pooh',
+        name: '送给”她“的可爱噗噗',
+        description: '比较满意的几张',
+        position: new Vector3(-6, 2, -8),
+        cover: new URL('@/assets/thing.jpg', import.meta.url).href,
+      },
+      {
         key: 'originCenterHouse',
         name: '客厅',
         description: '以前这里是一个客厅',
