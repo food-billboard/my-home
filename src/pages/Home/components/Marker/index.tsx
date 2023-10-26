@@ -84,7 +84,7 @@ const Marker = (props: MarkerProps) => {
   }, [])
 
   return (
-    <div className={styles['room-marker']}>
+    <>
       {
         interactivePoints.map(item => {
           const { visible, extraStyle, name, description, key, cover } = item
@@ -96,10 +96,10 @@ const Marker = (props: MarkerProps) => {
               }}
               key={key}
               onClick={handleClick.bind(null, item)}
-              className={styles['room-marker-item']}
+              className={styles['room-marker']}
             >
-              <BounceLoader className={styles['room-marker-item-icon']} size={20} color='white' />
-              <div className={styles['room-marker-item-main']}>
+              <BounceLoader className={styles['room-marker-icon']} size={20} color='white' />
+              <div className={styles['room-marker-main']}>
                 <img src={cover} onClick={handlePreview.bind(null, cover)} />
                 <div className={styles['room-marker-item-main-content']}>
                   <div style={{display: 'flex', justifyContent: 'space-between', padding: '8px 0'}}>
@@ -125,7 +125,7 @@ const Marker = (props: MarkerProps) => {
       >
         <img src={previewData.image} />
       </Modal>
-    </div>
+    </>
   )
 
 }

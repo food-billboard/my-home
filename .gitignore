@@ -9,3 +9,4 @@
 .swc
 /.history
 /src/assets/private/*
+/.DS_STORE
