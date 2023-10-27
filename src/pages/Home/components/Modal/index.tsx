@@ -2,15 +2,17 @@ import { ReactNode } from "react";
 import { createPortal } from "react-dom";
 import styles from "./index.less";
 
+export type ModalProps = {
+  visible?: boolean;
+  children?: ReactNode;
+  onClose?: () => void;
+}
+
 const Modal = ({
   visible,
   children: propsChildren,
   onClose,
-}: {
-  visible?: boolean;
-  children?: ReactNode;
-  onClose?: () => void;
-}) => {
+}: ModalProps) => {
 
   const children = (
     <>

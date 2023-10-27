@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState, CSSProperties, useRef } from 'react'
 import Marquee from 'react-fast-marquee'
 import { BounceLoader } from 'react-spinners'
 import * as THREE from 'three'
-import Modal from '../Modal'
+import Preview from '../Preview'
 import { EVENT, emitter } from '../../utils/mitt'
 import { ROOM_DATA } from '../../constants'
 import type { InteractivePoint } from '../../constants'
@@ -20,8 +20,8 @@ const Marker = (props: MarkerProps) => {
   const { currentRoom } = props
 
   const [interactivePoints, setInteractivePoints] = useState<CustomInteractivePoint[]>([])
-  const [previewData, setPreviewData] = useState({
-    image: '',
+  const [previewData, setPreviewData] = useState<{image: string[], visible: boolean}>({
+    image: [],
     visible: false 
   })
 
@@ -36,7 +36,7 @@ const Marker = (props: MarkerProps) => {
     (changeDataRef.current[pointKey] as any)[key] += value 
   }, [])
 
-  const handlePreview = useCallback((cover: string, e: any) => {
+  const handlePreview = useCallback((cover: string[], e: any) => {
     e.stopPropagation()
     setPreviewData({
       image: cover,
@@ -88,6 +88,7 @@ const Marker = (props: MarkerProps) => {
       {
         interactivePoints.map(item => {
           const { visible, extraStyle, name, description, key, cover } = item
+          const realCover = Array.isArray(cover) ? cover : [cover]
           return (
             <div
               style={{
@@ -100,7 +101,7 @@ const Marker = (props: MarkerProps) => {
             >
               <BounceLoader className={styles['room-marker-icon']} size={20} color='white' />
               <div className={styles['room-marker-main']}>
-                <img src={cover} onClick={handlePreview.bind(null, cover)} />
+                <img src={realCover[0]} onClick={handlePreview.bind(null, realCover)} />
                 <div className={styles['room-marker-item-main-content']}>
                   <div style={{display: 'flex', justifyContent: 'space-between', padding: '8px 0'}}>
                     <div onClick={handleChange.bind(null, key, 'x', .5)}>添加X</div>
@@ -119,12 +120,11 @@ const Marker = (props: MarkerProps) => {
           )
         })
       }
-      <Modal
+      <Preview
         visible={!!previewData.visible}
         onClose={onClose}
-      >
-        <img src={previewData.image} />
-      </Modal>
+        value={previewData.image}
+      />
     </>
   )
 

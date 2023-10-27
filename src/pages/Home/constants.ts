@@ -25,13 +25,16 @@ export const ROOM_DATA: RoomData = {
         name: '井',
         description: '小时候的水源，现在大家都当石墩子用',
         position: new Vector3(-6, 2, -8),
-        cover: new URL('@/assets/thing.jpg', import.meta.url).href,
+        cover: [
+          new URL('@/assets/thing.jpg', import.meta.url).href,
+          new URL('@/assets/thing2.jpg', import.meta.url).href
+        ],
       },
       {
         key: 'bikeShed',
         name: '车子',
         description: '家里的车子',
-        position: new Vector3(-6, 2, -8),
+        position: new Vector3(10, 2, -8),
         cover: new URL('@/assets/thing.jpg', import.meta.url).href,
       }
     ]
@@ -581,7 +584,7 @@ export type InteractivePoint = {
   name: string
   description?: string
   position: Vector3
-  cover: string
+  cover: string[] | string 
 }
 
 export type VisibleRoom = {
