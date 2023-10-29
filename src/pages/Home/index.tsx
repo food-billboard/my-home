@@ -4,6 +4,7 @@ import * as THREE from 'three'
 import { 
   SphereGeometry, 
   MeshBasicMaterial, 
+  MeshLambertMaterial,
   Mesh,
   WebGLRenderer,
   Scene,
@@ -37,7 +38,6 @@ const Home = () => {
 
   const renderer = useRef<THREE.WebGLRenderer>()
   const scene = useRef<THREE.Scene>()
-  const targetScene = useRef<THREE.Scene>()
   const camera = useRef<THREE.PerspectiveCamera>()
   const rayCaster = useRef<Raycaster>(new Raycaster())
   const controls = useRef<any>()
@@ -69,6 +69,9 @@ const Home = () => {
       geometry.scale(1, 1, -1);
       const material = new MeshBasicMaterial({
         side: THREE.DoubleSide,
+        transparent: true,
+        color: 0xeeeeee,
+        fog: false 
       });
       roomRef.current = new Mesh(geometry, material);
       roomRef.current.rotation.y = Math.PI / 2
@@ -147,26 +150,30 @@ const Home = () => {
 
       // 初始化场景
       scene.current = new Scene()
-      targetScene.current = new Scene()
+
+      // const axesHelper = new THREE.AxesHelper(100)
+      // scene.current.add(axesHelper)
 
       // 初始化相机
-      camera.current = new PerspectiveCamera(55, width / height, 0.1, 1000)
-      camera.current.position.set(0, 0, 2)
+      camera.current = new PerspectiveCamera(55, width / height, 0.01, 1000)
+      camera.current.position.set(0, 0, 10)
       scene.current.add(camera.current)
 
       // 镜头控制器
       controls.current = new OrbitControls(camera.current, renderer.current.domElement)
       controls.current.target.set(0, 0, 0)
+      // 自动旋转
+      controls.current.autoRotate = true
+      controls.current.autoRotateSpeed = 1.0 
       // 转动惯性
       controls.current.enableDamping = true;
       // 禁止平移
       controls.current.enablePan = false;
       // 缩放限制
-      controls.current.maxDistance = 12;
+      controls.current.maxDistance = 16;
       // 垂直旋转限制
       controls.current.minPolarAngle = Math.PI / 2;
       controls.current.maxPolarAngle = Math.PI / 2;
-
 
     }
     // 页面尺寸发生变化
@@ -192,6 +199,17 @@ const Home = () => {
     };
     tick();
 
+    // window.addEventListener('click', function(e) {
+    //   const mouse = new THREE.Vector2()
+    //   mouse.x = (e.clientX / window.innerWidth) * 2 - 1
+    //   mouse.y = -(e.clientY / window.innerHeight) * 2 + 1 
+    //   const raycaster = new THREE.Raycaster()
+    //   raycaster.setFromCamera(mouse, camera.current!)
+    //   const intersects = raycaster.intersectObject(roomRef.current!)
+
+    //   console.log(intersects[0]?.point)
+    // })
+
     return () => {
       done = true 
     }
@@ -207,6 +225,7 @@ const Home = () => {
 
   useUpdateEffect(() => {
     const currentRoomData = ROOM_DATA[currentRoom]
+    controls.current?.reset()
     createRoom(currentRoomData)
     // const x = currentRoomData.position.x
     // const y = currentRoomData.position.y
@@ -244,9 +263,9 @@ const Home = () => {
           </div>
         )
       }
-      <TinyMap 
+      {/* <TinyMap 
         currentRoom={currentRoom}
-      />
+      /> */}
       <WaterMark />
     </div>
   )

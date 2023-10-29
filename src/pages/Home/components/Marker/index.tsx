@@ -102,17 +102,8 @@ const Marker = (props: MarkerProps) => {
               <BounceLoader className={styles['room-marker-icon']} size={20} color='white' />
               <div className={styles['room-marker-main']}>
                 <img src={realCover[0]} onClick={handlePreview.bind(null, realCover)} />
-                <div className={styles['room-marker-item-main-content']}>
-                  <div style={{display: 'flex', justifyContent: 'space-between', padding: '8px 0'}}>
-                    <div onClick={handleChange.bind(null, key, 'x', .5)}>添加X</div>
-                    <div onClick={handleChange.bind(null, key, 'x', -.5)} style={{marginRight: 8}}>减少X</div>
-                    <div onClick={handleChange.bind(null, key, 'y', .5)}>添加Y</div>
-                    <div onClick={handleChange.bind(null, key, 'y', -.5)} style={{marginRight: 8}}>减少Y</div>
-                    <div onClick={handleChange.bind(null, key, 'z', .5)}>添加Z</div>
-                    <div onClick={handleChange.bind(null, key, 'z', -.5)}>减少Z</div>
-                  </div>
+                <div className={styles['room-marker-main-content']}>
                   <div>{name}</div>
-                  <div>({item.position.x})({item.position.y})({item.position.z})</div>
                   <Marquee speed={25} pauseOnHover>{description}</Marquee>
                 </div>
               </div>

@@ -3,7 +3,7 @@
   position: fixed;
   right: 0;
   top: 0;
-  z-index: 1;
+  z-index: 3;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -14,6 +14,9 @@
     border-bottom-left-radius: 12px;
     transition: background-color .5s;
     margin-bottom: 12px;
+    color: white;
+    background-color: rgba(0, 0, 0, 0.2);
+    cursor: pointer;
     &:nth-last-child(1) {
       margin-bottom: 0;
     }
@@ -30,6 +33,8 @@
   cursor: pointer;
   display: flex;
   align-items: center;
+}
+.room-changer-item-animate {
   @keyframes move {
     0% {
       transform: translateX(0);
