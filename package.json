@@ -9,7 +9,10 @@
     "start": "npm run dev",
     "tauri:init": "tauri init",
     "tauri:dev": "tauri dev",
-    "tauri:build": "tauri build"
+    "tauri:build": "tauri build",
+    "build:raspberry": "REACT_APP_ENV=prod umi build",
+    "deploy:raspberry": "node ../node-server/scripts/publishLocalFile.js",
+    "build-deploy:raspberry": "npm run build:raspberry && npm run deploy:raspberry"
   },
   "dependencies": {
     "ahooks": "^3.7.8",

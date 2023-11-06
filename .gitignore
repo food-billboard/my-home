@@ -10,3 +10,4 @@
 /.history
 /src/assets/private/*
 /.DS_Store
+deploy.config.json 
