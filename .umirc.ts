@@ -8,6 +8,9 @@ const baseConfig = {
     { path: "/", component: "Home" },
   ],
   hash: true,
+  history: {
+    type: 'hash'
+  },
   npmClient: 'yarn',
   links: [{ href: 'https://yarnpkg.com/en/package/normalize.css' }],
 }
@@ -22,7 +25,7 @@ const productionConfig: any = merge({}, baseConfig, {
   define: {
     'process.env.REACT_APP_ENV': 'prod',
   },
-  base: '/api/backend/my-home/',
+  base: '/',
   publicPath: '/api/backend/my-home/',
 });
 
